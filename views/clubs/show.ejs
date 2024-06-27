@@ -1,0 +1,98 @@
+<% layout('layouts/boilerplate')%>
+    <link rel="stylesheet" href="/stylesheets/stars.css">
+    <link rel="stylesheet" href="/stylesheets/clubs.css">
+
+    <div class="row">
+        <div class="col-5">
+            <div class="club-details card ">
+                <% for(let img of club.images) { %>
+                    <img crossorigin="anonymous" src="<%= img.url%>" class="card-img-top" alt="...">
+                    <% } %>
+                        <div class="card-body">
+                            <h5 class="card-title">
+                                <%= club.clubName%>
+                            </h5>
+                            <p class="card-text">
+                                <%= club.manager%>
+                            </p>
+                            <p class="card-text">
+                                <%= club.stadium%>
+                            </p>
+                        </div>
+                        <ul class="list-group list-group-flush">
+                            <li class="list-group-item">
+                                Submitted by <%= club.author.username%>
+                            </li>
+                        </ul>
+                        <% if(currentUser && club.author.equals(currentUser._id)){ %>
+                            <div class="card-body">
+                                <a class="card-link btn btn-info" href="/clubs/<%=club._id%>/edit">Edit</a>
+                                <form class="d-inline" action="/clubs/<%=club._id%>?_method=DELETE" method="POST">
+                                    <button class="btn btn-danger">Delete</button>
+                                </form>
+                            </div>
+                            <% } %>
+            </div>
+
+        </div>
+        <div class="col-6 offset-1">
+            <%if(!currentUser) { %>
+                <h2>Register or Login to leave a review!</h2>
+                <% }%>
+                    <% if(currentUser && !club.author.equals(currentUser._id)) { %>
+                        <h2>Leave a Review</h2>
+                        <form action="/clubs/<%=club._id%>/reviews" method="POST" class="mb-3 validated-form"
+                            novalidate>
+                            <div>
+                                <fieldset class="starability-basic">
+                                    <input type="radio" id="no-rate" class="input-no-rate" name="review[rating]"
+                                        value="1" checked aria-label="No rating." />
+                                    <input type="radio" id="first-rate1" name="review[rating]" value="1" />
+                                    <label for="first-rate1" title="Terrible">1 star</label>
+                                    <input type="radio" id="first-rate2" name="review[rating]" value="2" />
+                                    <label for="first-rate2" title="Not good">2 stars</label>
+                                    <input type="radio" id="first-rate3" name="review[rating]" value="3" />
+                                    <label for="first-rate3" title="Average">3 stars</label>
+                                    <input type="radio" id="first-rate4" name="review[rating]" value="4" />
+                                    <label for="first-rate4" title="Very good">4 stars</label>
+                                    <input type="radio" id="first-rate5" name="review[rating]" value="5" />
+                                    <label for="first-rate5" title="Amazing">5 stars</label>
+                                </fieldset>
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label" for="body">Review Text</label>
+                                <textarea class="form-control" name="review[body]" id="body" cols="30" rows="3"
+                                    required></textarea>
+                                <div class="valid-feedback">
+                                    Looks good!
+                                </div>
+                                <div class="invalid-feedback">
+                                    Provide a reivew.
+                                </div>
+                            </div>
+                            <button class="btn btn-success">Submit</button>
+                        </form>
+                        <% } %>
+                            <% for (let review of club.reviews){ %>
+                                <div class="user-review card ">
+                                    <div class="card-body">
+                                        <h5 class="review-author card-title">
+                                            <%= review.author.username %>
+                                        </h5>
+                                        <p class="starability-result" data-rating="<%=review.rating%>">
+                                            Rated: <%= review.rating %> stars
+                                        </p>
+                                        <p class="cart-text">Review: <%= review.body %>
+                                        </p>
+                                        <% if(currentUser && review.author.equals(currentUser._id)) { %>
+                                            <form action="/clubs/<%=club._id%>/reviews/<%=review._id%>?_method=DELETE"
+                                                method="POST">
+                                                <button class="btn btn-sm btn-danger">Delete</button>
+                                            </form>
+                                            <% } %>
+                                    </div>
+                                </div>
+                                <% } %>
+        </div>
+
+    </div>

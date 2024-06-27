@@ -1,0 +1,33 @@
+<% layout('layouts/boilerplate')%>
+    <link rel="stylesheet" href="/stylesheets/clubs.css">
+    <link rel="stylesheet" href="/stylesheets/index.css">
+    <h1>All Clubs</h1>
+    <% for (let club of clubs){%>
+        <div class="row my-4">
+            <div class="col-md-12 d-flex justify-content-between px-4 py-3 my-3">
+                <% if (club.images.length) { %>
+                    <img crossorigin="anonymous" class="lineup img-fluid" alt="" src="<%= club.images[0].url %>">
+                    <% } else { %>
+                        <img crossorigin="anonymous" class="lineup img-fluid" alt=""
+                            src="https://res.cloudinary.com/dww7z1rbn/image/upload/v1692463867/DreamEleven/q0nnxd7moe8awn3iredp.png"
+                            <% } %>
+                        <div class="">
+                            <div class="card-body">
+                                <h5 class="club-name card-title">
+                                    <%= club.clubName %>
+                                </h5>
+                                <p class="club-manager card-text text-muted">
+                                    <%= club.manager %>
+                                </p>
+                                <p class="card-text">
+                                    <small class="text-muted">
+                                        <%= club.stadium%>
+                                    </small>
+                                </p>
+                                <a class="btn" href="/clubs/<%=club._id%>">View <%=club.clubName%>
+                                </a>
+                            </div>
+                        </div>
+            </div>
+        </div>
+        <% } %>
